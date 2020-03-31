@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Licao</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+<div id="ready" class="container d-none">
+    <h1>Licao</h1>
+
+    <hr/>
+    <div class="row">
+        <div class="col-6" data-language="pt-BR">
+            <h2>Portuguese</h2>
+            <div class="actions">
+                <button id="titlePT" class="btn btn-primary">Copy title</button>
+                <button id="contentPT" class="btn btn-primary">Copy content</button>
+                <a href="#"  id="audioPT" class="btn btn-primary">Download Audio</a>
+            </div>
+        </div>
+
+        <div class="col-6" data-language="en-US">
+            <h2>English</h2>
+
+            <div class="actions">
+                <button id="titleEN" class="btn btn-primary">Copy title</button>
+                <button id="contentEN" class="btn btn-primary">Copy content</button>
+                <a href="#" id="audioEN" class="btn btn-primary">Download Audio</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="loading">
+    <h2>Loading</h2>
+</div>
+
+
+<script>
+  (async () => {
+    const response = await fetch('/licao');
+    const data = await response.json();
+    document.querySelector('#loading').classList.add('d-none');
+    document.querySelector('#ready').classList.remove('d-none');
+
+    const titleENButton = document.querySelector('#titleEN');
+    const contentENButton = document.querySelector('#contentEN');
+    const audioENButton = document.querySelector('#audioEN');
+
+    bindClickToCopy(titleENButton, data.en.lesson.title);
+    bindClickToCopy(contentENButton, data.en.lesson.content);
+    bindAudioToDownload(audioENButton, data.en.audio.url);
+
+    const titlePTButton = document.querySelector('#titlePT');
+    const contentPTButton = document.querySelector('#contentPT');
+    const audioPTButton = document.querySelector('#audioPT');
+
+    bindClickToCopy(titlePTButton, data.pt.lesson.title);
+    bindClickToCopy(contentPTButton, data.pt.lesson.content);
+    bindAudioToDownload(audioPTButton, data.pt.audio.url);
+
+    function bindClickToCopy(button, content) {
+      button.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(content);
+      });
+    }
+
+    function bindAudioToDownload(link, url) {
+      link.href = url;
+    }
+  })();
+</script>
+</body>
+</html>
