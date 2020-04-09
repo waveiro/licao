@@ -18,7 +18,7 @@
             <div class="actions">
                 <button id="titlePT" class="btn btn-primary">Copy title</button>
                 <button id="contentPT" class="btn btn-primary">Copy content</button>
-                <a href="#"  id="audioPT" class="btn btn-primary">Download Audio</a>
+                <a download target="_blank" href="#" id="audioPT" class="btn btn-primary">Download Audio</a>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
             <div class="actions">
                 <button id="titleEN" class="btn btn-primary">Copy title</button>
                 <button id="contentEN" class="btn btn-primary">Copy content</button>
-                <a href="#" id="audioEN" class="btn btn-primary">Download Audio</a>
+                <a download target="_blank" href="#" id="audioEN" class="btn btn-primary">Download Audio</a>
             </div>
         </div>
     </div>
@@ -63,8 +63,17 @@
     bindAudioToDownload(audioPTButton, data.pt.audio.url);
 
     function bindClickToCopy(button, content) {
-      button.addEventListener('click', async () => {
-        await navigator.clipboard.writeText(content);
+      button.addEventListener('click', () => {
+        const el = document.createElement('textarea');
+        el.value = content;
+        el.setAttribute('readonly', '');
+        el.style.position = 'absolute';
+        el.style.left = '-9999px';
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        // document.body.removeChild(el);
+        // await navigator.clipboard.writeText(content);
       });
     }
 
