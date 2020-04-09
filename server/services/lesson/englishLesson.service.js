@@ -39,6 +39,8 @@ class EnglishLessonService {
 
     lessonContentElements.forEach(contentPiece => content += sanitizeText(contentPiece));
 
+    content = content.trim(); //remove last \n\n
+
     await this.browserService.close();
 
     return { title, content };

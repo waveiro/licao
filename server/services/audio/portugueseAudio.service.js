@@ -19,7 +19,7 @@ class PortugueseAudioService {
     await this.browserService.navigate(latestEpisodePageAddress);
 
     const url = await this.browserService.querySelector('audio', audio => audio.src);
-    const title = await this.browserService.querySelector('.episode__title', h1 => h1.textContent);
+    const title = await this.browserService.querySelector('.episode__title', h1 => h1.innerText);
 
     await this.browserService.close();
 

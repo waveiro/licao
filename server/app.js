@@ -19,11 +19,11 @@ app.get('/licao', async (req, res) => {
   const portugueseAudioService = new PortugueseAudioService(browserService);
   const audioPortuguese = await portugueseAudioService.fetch();
 
-  // const englishLessonService = new EnglishLessonService(browserService);
-  // const lessonEnglish = await englishLessonService.fetch(formattedDate);
-  //
-  // const englishAudioService = new EnglishAudioService();
-  // const audioEnglish = await englishAudioService.fetch();
+  const englishLessonService = new EnglishLessonService(browserService);
+  const lessonEnglish = await englishLessonService.fetch(formattedDate);
+
+  const englishAudioService = new EnglishAudioService();
+  const audioEnglish = await englishAudioService.fetch();
 
   res.send({
     pt: {
@@ -31,14 +31,10 @@ app.get('/licao', async (req, res) => {
       audio: audioPortuguese
     },
     en: {
-      lesson: {},//lessonEnglish,
-      audio: {} //audioEnglish
+      lesson: lessonEnglish,
+      audio: audioEnglish
     }
   });
-
-  // res.send({
-  //   lessonPortuguese
-  // });
 
 });
 

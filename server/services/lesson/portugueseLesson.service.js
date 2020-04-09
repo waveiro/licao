@@ -15,23 +15,25 @@ class PortugueseLessonService {
     await this.browserService.navigate(currentLessonAddress);
 
     const currentDayId = this.getCurrentLessonDayId();
-    const headlineContent = await this.browserService.querySelector(`${currentDayId} .mdl-typography--headline`, e => e.textContent);
+    const headlineContent = await this.browserService.querySelector(`${currentDayId} .mdl-typography--headline`, e => e.innerText);
     const title = `*[${formattedDate}] ${headlineContent}*`;
 
-    const conteudoLicaoSelector = `${currentDayId} div.conteudoLicaoDia p`;
+    const conteudoLicaoSelector = `${currentDayId} div.conteudoLicaoDia p, ${currentDayId} .rodapeBoxLicaoDia.boxLicao`;
     const contentElements = await this.browserService.querySelectorAll(conteudoLicaoSelector,
       paragraphs => paragraphs.map(p => p.innerText));
 
     let content = '';
 
     if (currentDayId === '#licaoSabado') {
-      const verso = await this.browserService.querySelector('.versoMemorizarLicao', e => e.textContent);
+      const verso = await this.browserService.querySelector('.versoMemorizarLicao', e => e.innerText);
       content += verso;
 
-      const leiturasSemana = await this.browserService.querySelector('.leiturasSemanaLicao', e => e.textContent);
+      const leiturasSemana = await this.browserService.querySelector('.leiturasSemanaLicao', e => e.innerText);
       content += leiturasSemana;
 
       content = sanitizeText(content);
+    }else if(currentDayId === '#licaoSexta'){
+      contentElements.pop(); //remove answers to questions
     }
 
     for (const contentElement of contentElements) {
@@ -41,11 +43,11 @@ class PortugueseLessonService {
         content += ' ';
     }
 
-    content = content.substr(0, content.length - 4);
+    content = content.trim(); //remove last \n\n
 
     this.browserService.close();
 
-    return { title: title, content };
+    return { title, content };
   }
 
   getCurrentLessonDayId() {
